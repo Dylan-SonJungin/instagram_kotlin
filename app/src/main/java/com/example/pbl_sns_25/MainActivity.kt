@@ -30,12 +30,12 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean { //메뉴 선택
+    /*override fun onOptionsItemSelected(item: MenuItem): Boolean { //메뉴 선택
         when(item.itemId){
             R.id.action_home->homeFragment().show() //홈 화면이 보이도록
             R.id.action_myPage->myPageFragment().show()//마이페이지
             R.id.action_friendList->friendListFragment.show()//친구 목록
-            R.id.action_uploadPic->uploadPicFragment().show()//사진 업로드
+            R.id.action_uploadPic->uploadPicFragment().show()//사진 업로션
         }
-    }
+    }*/
 }
