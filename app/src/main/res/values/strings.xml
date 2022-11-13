@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">PBL-sns-25</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="home_fragment">home fragment</string>
+    <string name="friends_fragment">friends fragment</string>
+    <string name="myPage_fragment">my page fragment</string>
+    <string name="upload_fragment">Upload fragment</string>
+    <string name="home">Home</string>
+    <string name="mypage">myPage</string>
+    <string name="friends">Friends</string>
+    <string name="uploadpic">uploadPic</string>
+
 </resources>
