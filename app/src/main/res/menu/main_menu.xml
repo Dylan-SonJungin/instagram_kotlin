@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment"
+        android:title="@string/home"
+        android:icon="@drawable/ic_home"/>
 
-        <item android:id="@+id/action_home"
-                android:title="Home"/>
+    <item
+        android:id="@+id/myPageFragment"
+        android:title="@string/mypage"
+        android:icon="@drawable/ic_mypage"/>
 
-        <item android:id="@+id/action_myPage"
-              android:title="myPage" />
-        <item
-            android:id="@+id/action_friendList"
-            android:title="friendList" />
+    <item
+        android:id="@+id/friendListFragment"
+        android:title="@string/friends"
+        android:icon="@drawable/ic_friends"/>
 
-        <item
-            android:id="@+id/action_uploadPic"
-            android:title="uploadPic"/>
+    <item
+        android:id="@+id/uploadPicFragment"
+        android:title="@string/uploadpic"
+        android:icon="@drawable/ic_upload"/>
 </menu>
