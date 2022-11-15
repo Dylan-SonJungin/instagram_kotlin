@@ -28,9 +28,6 @@
                 android:contentDescription="@null" />
         </androidx.appcompat.widget.Toolbar>
 
-
-
-
         <FrameLayout
             android:id="@+id/mainFrameLayout"
             android:layout_width="match_parent"
