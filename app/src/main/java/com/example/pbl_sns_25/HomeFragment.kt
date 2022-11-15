@@ -19,22 +19,22 @@ private const val ARG_PARAM2 = "param2"
  */
 
 
-val db: FirebaseFirestore = Firebase.firestore
-val itemsCollectionRef = db.collection("items")
+//val db: FirebaseFirestore = Firebase.firestore
+//val itemsCollectionRef = db.collection("items")
 
 class HomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
-    private fun queryItem(itemID: String) {
+/*    private fun queryItem(itemID: String) {
         itemsCollectionRef.document(itemID).get()
             .addOnSuccessListener { // it: DocumentSnapshot
                 binding.editID.setText(it.id)
                 binding.editItemName.setText(it["name"].toString())
                 binding.editPrice.setText(it["price"].toString())
         }.addOnFailureListener { }
-    }
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
