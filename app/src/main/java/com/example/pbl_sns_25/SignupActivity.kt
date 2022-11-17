@@ -47,7 +47,8 @@ class SignupActivity : AppCompatActivity() {
                 "name" to userName,
                 "email" to userEmail
             )
-            itemsCollectionRef.add(infoMap)
+            itemsCollectionRef.document(userEmail).set(infoMap)
+            //itemsCollectionRef.add(infoMap)
         }
     }
 }
