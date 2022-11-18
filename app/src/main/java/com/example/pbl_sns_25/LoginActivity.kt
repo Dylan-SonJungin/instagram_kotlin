@@ -20,6 +20,13 @@ class LoginActivity : AppCompatActivity() {
             val password = binding.password.text.toString()
             doLogin(userEmail, password)
         }
+
+        binding.signUp.setOnClickListener{
+            startActivity(
+                Intent(this, SignupActivity::class.java))
+            finish()
+            //회원가입 페이지로 이동
+        }
     }
     private fun doLogin(userEmail: String, password: String) {
         Firebase.auth.signInWithEmailAndPassword(userEmail, password)
@@ -30,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
                     finish ()
                 } else {
                     Log.w("LoginActivity", "signInWithEmail", it.exception)
-                    Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Login Failed.", Toast.LENGTH_SHORT).show()
                 }
             }
     }
