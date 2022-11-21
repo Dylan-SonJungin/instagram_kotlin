@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.pbl_sns_25.databinding.FragmentHomeBinding
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 // TODO: Rename parameter arguments, choose names that match
@@ -19,22 +22,24 @@ private const val ARG_PARAM2 = "param2"
  */
 
 
-//val db: FirebaseFirestore = Firebase.firestore
-//val itemsCollectionRef = db.collection("items")
+val db: FirebaseFirestore = Firebase.firestore
+val itemsCollectionRef = db.collection("items")
+
 
 class HomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    val binding = FragmentHomeBinding.inflate(layoutInflater)
 
-/*    private fun queryItem(itemID: String) {
-        itemsCollectionRef.document(itemID).get()
+    private fun queryItem(userID: String) {
+        itemsCollectionRef.document(userID).get()
             .addOnSuccessListener { // it: DocumentSnapshot
                 binding.editID.setText(it.id)
                 binding.editItemName.setText(it["name"].toString())
                 binding.editPrice.setText(it["price"].toString())
         }.addOnFailureListener { }
-    }*/
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,24 +51,19 @@ class HomeFragment : Fragment() {
 
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+    }
+
     /*override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     companion object {
-        *//**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         *//*
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             HomeFragment().apply {
