@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.util.zip.Inflater
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,10 +31,9 @@ val itemsCollectionRef = db.collection("items")
 
 
 class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    //private var param1: String? = null
-    //private var param2: String? = null
-    val binding = FragmentHomeBinding.inflate(layoutInflater)
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
+    //val binding = FragmentHomeBinding.inflate(inflater)
     //user = FirebaseAuth.getInstance().currentUser
 
 
@@ -59,29 +59,28 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.postRecyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding.postRecyclerview.adapter = CustomAdapter(postList)
-        /*arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }*/
-
-
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//    }
 
-    }
-
-    /*override fun onCreateView(
+    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding?.postRecyclerview?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        _binding?.postRecyclerview?.adapter = CustomAdapter(postList)
+        return binding.root
     }
 
-    companion object {
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
+    /*companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             HomeFragment().apply {

@@ -13,7 +13,8 @@ class CustomAdapter(val postList: ArrayList<HomeFragment.Posts>) : RecyclerView.
             binding.textView2.text = postList.get(pos).text
         }
     }
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): CustomAdapter.viewHolder {
+
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): viewHolder {
         val layoutInflater = LayoutInflater.from(viewGroup.context)
         val binding = ItemPostBinding.inflate(layoutInflater, viewGroup, false)
         return viewHolder(binding)
@@ -21,8 +22,9 @@ class CustomAdapter(val postList: ArrayList<HomeFragment.Posts>) : RecyclerView.
 
     override fun onBindViewHolder(viewHolder: viewHolder, position: Int){
         viewHolder.setContents(position)
-        //viewHolder.textview.text
     }
 
-    override fun getItemCount() = 10 //임의로 10개라고 정해둠
+    override fun getItemCount(): Int {
+        return postList.size
+    }
 }
