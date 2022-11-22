@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pbl_sns_25.databinding.FragmentHomeBinding
 import com.example.pbl_sns_25.databinding.ItemPostBinding
 
-class CustomAdapter(val postList: ArrayList<HomeFragment.Posts>) : RecyclerView.Adapter<CustomAdapter.viewHolder>(){
+class CustomAdapter(val postList: Array<HomeFragment.Posts>) : RecyclerView.Adapter<CustomAdapter.viewHolder>(){
     inner class viewHolder(private val binding:ItemPostBinding): RecyclerView.ViewHolder(binding.root){
         fun setContents(pos: Int){
             binding.textView.text = postList.get(pos).name
