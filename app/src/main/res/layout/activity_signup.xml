@@ -14,8 +14,8 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:background="@color/teal_200"
+            android:layout_height="50dp"
+            android:background="#00428B"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme">
             <ImageView
@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:background="#00FFFFFF"
-                app:srcCompat="@drawable/logo"
+                app:srcCompat="@drawable/logo_white"
                 android:contentDescription="@null" />
         </androidx.appcompat.widget.Toolbar>
 
@@ -45,11 +45,12 @@
 
     <Button
         android:id="@+id/signUp"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="150dp"
+        android:background="@drawable/round_button"
         android:text="Sign Up"
-        android:background="@color/teal_200"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
