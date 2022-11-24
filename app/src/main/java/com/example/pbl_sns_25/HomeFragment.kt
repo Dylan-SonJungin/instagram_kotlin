@@ -31,6 +31,10 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        getPosts()
+    }
 
     class Posts(val name: String, val text: String)
     var friendList = arrayOf<String>()
@@ -69,13 +73,6 @@ class HomeFragment : Fragment() {
                 }
         }
     }
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        getPosts()
-    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
