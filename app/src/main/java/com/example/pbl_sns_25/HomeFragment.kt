@@ -16,6 +16,8 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import java.util.*
 import java.util.zip.Inflater
 
@@ -24,6 +26,7 @@ import java.util.zip.Inflater
 var user: String = "gcLSCBjllq0ggIK0XgcB"
 //var user: String = FirebaseAuth.getInstance().currentUser
 val db: FirebaseFirestore = Firebase.firestore
+var storage: FirebaseStorage = Firebase.storage
 val itemsCollectionRef = db.collection("users")
 
 
@@ -39,6 +42,7 @@ class HomeFragment : Fragment() {
         Posts("테스트2", "테스트텍스트입니다")
     )
 
+    // 현재 user id로 친구목록 불러오기
     fun getFriends(){
         itemsCollectionRef.document(user).collection("friends")
             .get()
@@ -47,11 +51,13 @@ class HomeFragment : Fragment() {
                     friendList = friendList.plus((document["fid"] as String).trim())
                     Log.d("친구추가", (document["fid"] as String).trim())
                 }
-                print("친구목록: ")
+                print("친구목록: ") //그냥 실행시 친구목록에 추가되어있는데 debug로 돌려보면 addOnSuccessListener시작부터 끝까지 그냥 넘어간다.
+                // 화면이 다 그려지고 난 뒤에 함수가 불리는거 같기도하고,,,
                 println(Arrays.toString(friendList))
             }
     }
 
+    //친구목록에서 가져온 fid로 각 친구의 post불러오는 함수
     fun getPosts(){
         getFriends()
         friendList.forEach {
@@ -68,12 +74,13 @@ class HomeFragment : Fragment() {
                     println(Arrays.toString(postList))
                 }
         }
+        //return
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getPosts()
+        //getPosts()
     }
 
 
@@ -81,6 +88,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        getPosts()
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         _binding?.postRecyclerview?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         _binding?.postRecyclerview?.adapter = CustomAdapter(postList)
@@ -89,6 +97,10 @@ class HomeFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        print("친구목록2")
+        println(Arrays.toString(friendList))
+        print("게시글목록2:")
+        println(Arrays.toString(postList))
         _binding = null
     }
 }
