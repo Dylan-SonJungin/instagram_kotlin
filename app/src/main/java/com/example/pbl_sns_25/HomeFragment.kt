@@ -1,31 +1,76 @@
 package com.example.pbl_sns_25
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.pbl_sns_25.databinding.FragmentHomeBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import java.util.*
+import java.util.zip.Inflater
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+//var user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+var user: String = "gcLSCBjllq0ggIK0XgcB"
+//var user: String = FirebaseAuth.getInstance().currentUser
+val db: FirebaseFirestore = Firebase.firestore
+val itemsCollectionRef = db.collection("users")
+
+
 class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        getPosts()
+    }
+
+    class Posts(val name: String, val text: String)
+    var friendList = arrayOf<String>()
+    var postList = arrayOf(
+        Posts("테스트1", "테스트텍스트입니다"),
+        Posts("테스트2", "테스트텍스트입니다")
+    )
+
+    fun getFriends(){
+        itemsCollectionRef.document(user).collection("friends")
+            .get()
+            .addOnSuccessListener { result ->
+                for(document in result){
+                    friendList = friendList.plus((document["fid"] as String).trim())
+                    Log.d("친구추가", (document["fid"] as String).trim())
+                }
+                print("친구목록: ")
+                println(Arrays.toString(friendList))
+            }
+    }
+
+    fun getPosts(){
+        getFriends()
+        friendList.forEach {
+            println(it)
+            itemsCollectionRef.document(it).collection("posts")
+                .get()
+                .addOnSuccessListener { result ->
+                    for(document in result){
+                        println(it)
+                        postList = postList.plus(Posts(it, document["text"] as String))
+                        Log.d("게시글추가", document["text"] as String)
+                    }
+                    print("게시글목록:")
+                    println(Arrays.toString(postList))
+                }
         }
     }
 
@@ -33,27 +78,14 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding?.postRecyclerview?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        _binding?.postRecyclerview?.adapter = CustomAdapter(postList)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
