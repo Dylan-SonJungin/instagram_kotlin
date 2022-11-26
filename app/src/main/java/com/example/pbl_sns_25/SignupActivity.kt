@@ -21,13 +21,18 @@ class SignupActivity : AppCompatActivity() {
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val uid=Firebase.auth.currentUser?.uid.toString()
+
         binding.signUp.setOnClickListener {
             val userEmail = binding.userEmail.text.toString()
             val userName = binding.userName.text.toString()
             val password = binding.userPassword.text.toString()
+
+            System.out.println("Signup UID:   "+uid)
             val infoMap = hashMapOf(
                 "name" to userName,
-                "email" to userEmail
+                "email" to userEmail,
+                "uid" to null
             )
 
             itemsCollectionRef.get().addOnSuccessListener {
@@ -40,8 +45,9 @@ class SignupActivity : AppCompatActivity() {
         Firebase.auth.createUserWithEmailAndPassword(userEmail, password)
             .addOnCompleteListener(this) { // it: Task<AuthResult!>
                 if (it.isSuccessful) {
-                    startActivity(
-                        Intent(this, LoginActivity::class.java))
+                    val uid=Firebase.auth.currentUser?.uid.toString()
+                    itemsCollectionRef.document(userEmail).update("uid",uid)
+                    startActivity(Intent(this, LoginActivity::class.java))
                     finish ()
                 } else {
                     Toast.makeText(this, "Sign Up Failed.", Toast.LENGTH_SHORT).show()
