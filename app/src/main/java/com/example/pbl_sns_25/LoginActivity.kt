@@ -18,18 +18,15 @@ class LoginActivity : AppCompatActivity(){
         val binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val intent = Intent(this, MainActivity::class.java)
-
         binding.signIn.setOnClickListener {
             val userEmail = binding.userEmail.text.toString()
             val password = binding.password.text.toString()
 
-            intent.putExtra("userEmail",userEmail)
-
             Firebase.auth.signInWithEmailAndPassword(userEmail, password)
                 .addOnCompleteListener(this) { // it: Task<AuthResult!>
                     if (it.isSuccessful) {
-                        startActivity(intent)
+                        //intent.putExtra("userEmail",userEmail)
+                        startActivity(Intent(this, MainActivity::class.java))
                         finish ()
                     } else {
                         Log.w("LoginActivity", "signInWithEmail", it.exception)

@@ -89,7 +89,7 @@
         app:layout_constraintTop_toBottomOf="@+id/signIn" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/nameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"

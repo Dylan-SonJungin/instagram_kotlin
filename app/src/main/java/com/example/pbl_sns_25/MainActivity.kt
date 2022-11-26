@@ -1,8 +1,12 @@
 package com.example.pbl_sns_25
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.pbl_sns_25.databinding.ActivityMainBinding
@@ -18,19 +22,21 @@ private const val TAG_UPLOAD = "upload_fragment"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
-
+    val uid=Firebase.auth.currentUser?.uid.toString()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (Firebase.auth.currentUser == null) {
+        System.out.println("Main UID:    "+uid)
+
+        /*if (Firebase.auth.currentUser == null) {
             startActivity(
                 Intent(this, LoginActivity::class.java)
             )
             finish()
-        }
+        }*/
 
         setFragment(TAG_HOME, HomeFragment())
 
@@ -39,7 +45,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.homeFragment -> setFragment(TAG_HOME, HomeFragment())
                 R.id.friendListFragment -> setFragment(TAG_FRIENDS, FriendsFragment())
                 R.id.myPageFragment-> setFragment(TAG_MY_PAGE, MyPageFragment())
-                R.id.uploadPicFragment -> setFragment(TAG_UPLOAD,UploadFragment())
+                R.id.uploadPicFragment -> {
+                    startActivity(Intent(this, UploadActivity::class.java))
+                    System.out.println("start upload")
+                }//setFragment(TAG_UPLOAD,UploadFragment())
             }
             true
         }
@@ -50,6 +59,7 @@ class MainActivity : AppCompatActivity() {
         val fragTransaction = manager.beginTransaction()
 
         var userEmail:String?
+
         userEmail=intent.getStringExtra("userEmail")
 
         if (manager.findFragmentByTag(tag) == null){
@@ -59,9 +69,9 @@ class MainActivity : AppCompatActivity() {
         val home = manager.findFragmentByTag(TAG_HOME)
         val friends = manager.findFragmentByTag(TAG_FRIENDS)
         val myPage = manager.findFragmentByTag(TAG_MY_PAGE)
-        val uploadPic = manager.findFragmentByTag(TAG_UPLOAD)
+        //val uploadPic = manager.findFragmentByTag(TAG_UPLOAD)
 
-        if (home != null){
+        /*if (home != null){
             fragTransaction.hide(home)
         }
 
@@ -71,11 +81,11 @@ class MainActivity : AppCompatActivity() {
 
         if (myPage != null) {
             fragTransaction.hide(myPage)
-        }
+        }*/
 
-        if (uploadPic != null){
+       /* if (uploadPic != null){
             fragTransaction.hide(uploadPic)
-        }
+        }*/
 
         if (tag == TAG_HOME) {
             val homeFragment= HomeFragment()
@@ -93,23 +103,21 @@ class MainActivity : AppCompatActivity() {
 
         else if (tag == TAG_MY_PAGE){
             val userFragment = MyPageFragment()
-           // val uid=Firebase.auth.currentUser?.uid.toString()
-            val bundle = Bundle()
-            bundle.putString("userEmail", userEmail)
-            userFragment.arguments = bundle
             supportFragmentManager.beginTransaction()
                 .replace(R.id.mainFrameLayout, userFragment)
                 .commit()
         }
 
-        else if (tag == TAG_UPLOAD){
-            val uploadFragment= UploadFragment()
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.mainFrameLayout,uploadFragment )
-                .commit()
-        }
+        //else if (tag == TAG_UPLOAD){
 
-        fragTransaction.commitAllowingStateLoss()
+            //val uploadFragment=UploadFragment()
+            //supportFragmentManager.findFragmentById(R.id.myPageFragment) as UploadFragment
+            /*supportFragmentManager.beginTransaction()
+                .replace(R.id.mainFrameLayout,uploadFragment )
+                .commit()*/
+       // }
+
+        //fragTransaction.commitAllowingStateLoss()
     }
 
 }

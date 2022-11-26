@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout"
+    android:id="@+id/album"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MyPageFragment">
@@ -12,13 +12,14 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/nameView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:text="TextView"
             android:textSize="25dp"
+            android:textColor="#00428B"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,13 +34,34 @@
             android:id="@+id/button"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/round_button"
             android:text="LOGOUT"
             android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameView" />
+
+        <TextView
+            android:id="@+id/emailView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textColor="#00428B"
+            app:layout_constraintBottom_toBottomOf="@+id/button"
+            app:layout_constraintStart_toStartOf="@+id/nameView"
+            app:layout_constraintTop_toTopOf="@+id/button" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="님의 페이지"
+            app:layout_constraintBottom_toBottomOf="@+id/nameView"
+            app:layout_constraintStart_toEndOf="@+id/nameView"
+            app:layout_constraintTop_toTopOf="@+id/nameView" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

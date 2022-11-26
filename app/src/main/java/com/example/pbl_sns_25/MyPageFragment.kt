@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.bumptech.glide.Glide
@@ -28,45 +30,63 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 
 class MyPageFragment : Fragment() {
-    private lateinit var binding : FragmentMyPageBinding
-    var userEmail:String?=null
-    val db: FirebaseFirestore = Firebase.firestore
-    val storage=Firebase.storage
+    //private lateinit var binding : FragmentMyPageBinding
 
-    var userList= ArrayList<String>()
+    var auth: FirebaseAuth? = null
+
+    var uid: String? = null
+    var i=0
+    val posts= mutableListOf(Post("https://firebasestorage.googleapis.com/v0/b/sns-25.appspot.com/o/blueinsta_original.png?alt=media&token=e2979537-710e-4ccb-b751-793a5f99d82b",
+        "Welcome to Instagram!!!\n게시물 업로드 예시입니다."))
+    val postAdapter=PostAdapter(this, posts)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentMyPageBinding.inflate(inflater, container, false)
+        val binding = FragmentMyPageBinding.inflate(inflater, container, false)
+        //val binding= FragmentMyPageBinding.inflate(layoutInflater)
 
-        userEmail = arguments?.getString("userEmail")
-        binding.textView.text = userEmail
+        uid=Firebase.auth.currentUser?.uid.toString()
 
-        db.collection("posts").get()
+        db.collection("users").get()
             .addOnSuccessListener {
                 for(doc in it){
-                    if (doc["userEmail"].toString() == userEmail) {
-                        userList.add(doc["picUrl"] as String)
-                        System.out.println(doc["picUrl"])
+                    if(doc["uid"].toString()==uid) {
+                        binding.nameView.text = doc["name"].toString()
+                        binding.emailView.text = "현재 사용중인 계정:\n"+doc["email"].toString()
                     }
                 }
             }
 
-        userList.add("https://firebasestorage.googleapis.com/v0/b/sns-25.appspot.com/o/blueinsta_original.png?alt=media&token=e2979537-710e-4ccb-b751-793a5f99d82b")
-        //Test 용
+        db.collection("posts").get()
+            .addOnSuccessListener {
+                for(doc in it){
+                    if(doc["uid"].toString()==uid) {
+                        posts.add(0,Post(doc["picUrl"].toString(),doc["text"].toString()))
+                        postAdapter.notifyItemInserted(0)
+                    }
+                }
+            }
+
+        //val mAdapter = PostAdapter(this, userList)
+        binding.recyclerView.setHasFixedSize(true)
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.adapter = postAdapter
 
 
         binding.button.setOnClickListener {
-            Firebase.auth.signOut()
             startActivity(
                 Intent(activity, LoginActivity::class.java)
             )
+            activity?.finish()
+            auth?.signOut()
         }
-
-        val mAdapter = PostAdapter(this, userList)
-        binding.recyclerView.adapter = mAdapter
-        binding.recyclerView.layoutManager = GridLayoutManager(context, 3)
 
         return binding.root
     }
+
+    override fun onDestroy() {
+        System.out.println("onDestroy")
+        super.onDestroy()
+    }
+
 }
 
