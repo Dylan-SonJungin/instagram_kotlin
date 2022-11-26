@@ -5,11 +5,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pbl_sns_25.databinding.FragmentHomeBinding
 import com.example.pbl_sns_25.databinding.ItemPostBinding
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 
 class CustomAdapter(val postList: Array<HomeFragment.Posts>) : RecyclerView.Adapter<CustomAdapter.viewHolder>(){
+
+    //lateinit var storage: FirebaseStorage = Firebase.storage
+
     inner class viewHolder(private val binding:ItemPostBinding): RecyclerView.ViewHolder(binding.root){
         fun setContents(pos: Int){
             binding.textView.text = postList.get(pos).name
+            //binding.imageView.
             binding.textView2.text = postList.get(pos).text
         }
     }
