@@ -11,9 +11,14 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 
-class CustomAdapter(val postList: Array<HomeFragment.Posts>) : RecyclerView.Adapter<CustomAdapter.viewHolder>(){
+class CustomAdapter(val postList: Array<HomeFragment.Post>) : RecyclerView.Adapter<CustomAdapter.viewHolder>(){
 
     //lateinit var storage: FirebaseStorage = Firebase.storage
+
+    fun add(item: HomeFragment.Post){
+        postList.plus(item)
+        notifyDataSetChanged()
+    }
 
     inner class viewHolder(private val binding:ItemPostBinding): RecyclerView.ViewHolder(binding.root){
         fun setContents(pos: Int){
