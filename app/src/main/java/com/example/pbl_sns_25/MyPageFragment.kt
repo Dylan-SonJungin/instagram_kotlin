@@ -35,7 +35,6 @@ class MyPageFragment : Fragment() {
     var auth: FirebaseAuth? = null
 
     var uid: String? = null
-    var i=0
     val posts= mutableListOf(Post("https://firebasestorage.googleapis.com/v0/b/sns-25.appspot.com/o/blueinsta_original.png?alt=media&token=e2979537-710e-4ccb-b751-793a5f99d82b",
         "Welcome to Instagram!!!\n게시물 업로드 예시입니다."))
     val postAdapter=PostAdapter(this, posts)
@@ -58,14 +57,15 @@ class MyPageFragment : Fragment() {
 
         db.collection("posts").get()
             .addOnSuccessListener {
-                for(doc in it){
-                    if(doc["uid"].toString()==uid) {
-                        posts.add(0,Post(doc["picUrl"].toString(),doc["text"].toString()))
+                for(doc in it) {
+                    if (doc["uid"].toString() == uid) {
+                        posts.add(0, Post(doc["picUrl"].toString(), doc["text"].toString()))
                         postAdapter.notifyItemInserted(0)
                     }
                 }
             }
 
+        //binding.postInt.text= posts.size.toString()
         //val mAdapter = PostAdapter(this, userList)
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager = LinearLayoutManager(context)

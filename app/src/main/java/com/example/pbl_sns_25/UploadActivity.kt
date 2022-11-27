@@ -30,9 +30,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 
-
-//data class Upload(val picUrl:String, val text: String)
-
 class UploadActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUploadBinding
     var imageFile=File("")
@@ -48,7 +45,6 @@ class UploadActivity : AppCompatActivity() {
         ActivityResultContracts.StartActivityForResult()
     ){result->
         if(result.resultCode==RESULT_OK){
-            //val imageUri=result.data?.data
             imageUri=result.data?.data
             imageUri?.let{
                 imageFile= File(getRealPathFromURI(it))
@@ -111,7 +107,8 @@ class UploadActivity : AppCompatActivity() {
     fun contentUpload() {
         if (imageUri != null) {
             var fileName =
-                SimpleDateFormat("yyyyMMddHHmmss").format(Date()) // 파일명이 겹치면 안되기 떄문에 시년월일분초 지정
+                SimpleDateFormat("yyyyMMddHHmmss").format(Date())
+            var date=SimpleDateFormat("yyyy-MM-dd-HH-mm").format(Date())// 파일명이 겹치면 안되기 떄문에 시년월일분초 지정
             storage.getReference().child(uid).child(fileName)
                 .putFile(imageUri!!)//어디에 업로드할지 지정
                 .addOnSuccessListener { taskSnapshot -> // 업로드 정보를 담는다
@@ -120,6 +117,7 @@ class UploadActivity : AppCompatActivity() {
                         post.put("uid", uid)
                         post.put("picUrl", picUrl);
                         post.put("text", binding.picText.text.toString())
+                        post.put("date",date)
                         db.collection("posts").document().set(post)
                             .addOnSuccessListener {
                                 Snackbar.make(
@@ -131,12 +129,6 @@ class UploadActivity : AppCompatActivity() {
                             }
                     }
                 }
-
-            /* post.put("uid",uid)
-        post.put("picUrl","null");
-        post.put("text",binding.picText.text.toString())
-        db.collection("posts").document().set(post)
-        Snackbar.make(binding.root, "Upload completed.", Snackbar.LENGTH_SHORT).show()*/
         }
     }
 
