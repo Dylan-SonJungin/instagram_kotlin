@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pbl_sns_25.databinding.ActivitySignupBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -19,36 +20,38 @@ class SignupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.signUp.setOnClickListener{
+
+        val uid=Firebase.auth.currentUser?.uid.toString()
+
+        binding.signUp.setOnClickListener {
             val userEmail = binding.userEmail.text.toString()
+            val userName = binding.userName.text.toString()
             val password = binding.userPassword.text.toString()
-            updateUserInfo();
-            doSignUp(userEmail, password)
+
+            System.out.println("Signup UID:   "+uid)
+            val infoMap = hashMapOf(
+                "name" to userName,
+                "email" to userEmail,
+                "uid" to null
+            )
+
+            itemsCollectionRef.get().addOnSuccessListener {
+                itemsCollectionRef.document(userEmail).set(infoMap)
+                doSignUp(userEmail, password)
+            }
         }
     }
     private fun doSignUp(userEmail: String, password: String) {
         Firebase.auth.createUserWithEmailAndPassword(userEmail, password)
             .addOnCompleteListener(this) { // it: Task<AuthResult!>
                 if (it.isSuccessful) {
-                    startActivity(
-                        Intent(this, LoginActivity::class.java))
+                    val uid=Firebase.auth.currentUser?.uid.toString()
+                    itemsCollectionRef.document(userEmail).update("uid",uid)
+                    startActivity(Intent(this, LoginActivity::class.java))
                     finish ()
                 } else {
                     Toast.makeText(this, "Sign Up Failed.", Toast.LENGTH_SHORT).show()
                 }
             }
-    }
-
-    private fun updateUserInfo() {
-        itemsCollectionRef.get().addOnSuccessListener {
-            val userEmail = binding.userEmail.text.toString()
-            val userName = binding.userName.text.toString()
-            val infoMap = hashMapOf(
-                "name" to userName,
-                "email" to userEmail
-            )
-            itemsCollectionRef.document(userEmail).set(infoMap)
-            //itemsCollectionRef.add(infoMap)
-        }
     }
 }
