@@ -1,33 +1,16 @@
 package com.example.pbl_sns_25
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Recycler
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.example.pbl_sns_25.databinding.ActivityLoginBinding
 import com.example.pbl_sns_25.databinding.FragmentMyPageBinding
-import com.example.pbl_sns_25.databinding.PostLayoutBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
 
 class MyPageFragment : Fragment() {
     //private lateinit var binding : FragmentMyPageBinding

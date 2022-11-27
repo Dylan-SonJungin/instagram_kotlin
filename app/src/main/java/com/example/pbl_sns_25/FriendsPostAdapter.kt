@@ -1,24 +1,24 @@
 package com.example.pbl_sns_25
-import androidx.recyclerview.widget.RecyclerView
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.pbl_sns_25.databinding.PostLayoutBinding
 
+data class FriendsPost(val picUrl: String, val text: String)
 
-data class Post(val picUrl: String, val text: String)
+class FriendsPostViewHolder(val binding: PostLayoutBinding) : RecyclerView.ViewHolder(binding.root)
 
-class MyViewHolder(val binding: PostLayoutBinding) : RecyclerView.ViewHolder(binding.root)
-
-class PostAdapter(private val context: MyPageFragment, private val posts: MutableList<Post>) : RecyclerView.Adapter<MyViewHolder>() {
+class FriendsPostAdapter(private val context: FriendsPageActivity, private val posts: MutableList<FriendsPost>) : RecyclerView.Adapter<FriendsPostViewHolder>() {
     //val uid=Firebase.auth.currentUser?.uid.toString()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendsPostViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = PostLayoutBinding.inflate(inflater, parent, false)
-        return MyViewHolder(binding)
+        return FriendsPostViewHolder(binding)
     }
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: FriendsPostViewHolder, position: Int) {
         val post=posts[position]
         holder.binding.postText.text=post.text.toString()
         Glide.with(holder.itemView.context)
