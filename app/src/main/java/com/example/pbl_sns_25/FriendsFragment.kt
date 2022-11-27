@@ -1,59 +1,77 @@
 package com.example.pbl_sns_25
 
+import android.R
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.pbl_sns_25.databinding.FragmentFriendsBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FriendsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FriendsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    var auth: FirebaseAuth? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    var uid: String? = null
+    var i=0
+    val friends= mutableListOf(Friends("email"))
+    val friendsAdapter=FriendsAdapter(this, friends)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_friends, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val binding = FragmentFriendsBinding.inflate(inflater, container, false)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FriendsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FriendsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+        uid= Firebase.auth.currentUser?.uid.toString()
+
+        db.collection("users").get()
+            .addOnSuccessListener {
+                for(doc in it){
+                    if(doc["uid"].toString()==uid) {
+                        db.collection("users").document(doc["email"].toString()).collection("friends").get()
+                            .addOnSuccessListener {
+                                for(doc in it) {
+                                    friends.add(
+                                        0,
+                                        Friends(doc["email"].toString())
+                                    )
+                                    friendsAdapter.notifyItemInserted(0)
+                                }
+                            }
+                    }
                 }
             }
+
+        binding.recyclerView.setHasFixedSize(true)
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.adapter = friendsAdapter
+
+        binding.button2.setOnClickListener {
+            val userEmail = binding.editTextTextEmailAddress.text.toString()
+            val infoMap = hashMapOf(
+                "email" to userEmail
+            )
+            db.collection("users").get()
+                .addOnSuccessListener {
+                    for(doc in it){
+                        if(doc["uid"].toString()==uid) {
+                           db.collection("users").document(doc["email"].toString()).collection("friends")
+                               .add(infoMap)
+                               .addOnSuccessListener {
+                                   println("Success")
+                               }
+                        }
+                    }
+                }
+        }
+
+        return binding.root
+    }
+
+    override fun onDestroy() {
+        System.out.println("onDestroy")
+        super.onDestroy()
     }
 }
