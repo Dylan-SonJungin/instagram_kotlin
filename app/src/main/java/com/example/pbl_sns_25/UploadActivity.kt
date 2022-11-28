@@ -68,11 +68,6 @@ class UploadActivity : AppCompatActivity() {
         binding = ActivityUploadBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        binding.homebutton.setOnClickListener{
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }
         binding.albumbutton.setOnClickListener {
             openGallery()
         }
