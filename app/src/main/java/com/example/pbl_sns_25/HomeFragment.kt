@@ -1,8 +1,8 @@
 package com.example.pbl_sns_25
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,9 +14,11 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.pbl_sns_25.databinding.FragmentHomeBinding
+import com.example.pbl_sns_25.databinding.FragmentMyPageBinding
 import com.google.android.gms.tasks.Tasks.await
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -27,95 +29,56 @@ import kotlinx.coroutines.runBlocking
 import java.util.*
 import java.util.zip.Inflater
 
-
-//var user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
-
 class HomeFragment : Fragment() {
-    var user: String = "gcLSCBjllq0ggIK0XgcB"
+    var auth: FirebaseAuth? = null
     val db: FirebaseFirestore = Firebase.firestore
-    var storage: FirebaseStorage = Firebase.storage
-    val itemsCollectionRef = db.collection("users")
-    private lateinit var binding: FragmentHomeBinding
-
-    class Post(val name: String, val text: String)
-    var friendList = arrayOf<String>("a@gmail.com")
-    var postList = arrayOf<Post>()
-    val adapter = CustomAdapter(getPosts())
+    var uid: String? = null
+    var userEmail:String?=null
+    val friendList= mutableListOf<String>()
+    val homeposts= mutableListOf(HomePost("example","https://firebasestorage.googleapis.com/v0/b/sns-25.appspot.com/o/blueinsta_original.png?alt=media&token=e2979537-710e-4ccb-b751-793a5f99d82b","친구 게시물 예시입니다."))
+    val customAdapter=CustomAdapter(this, homeposts)
 
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-    // 현재 user id로 친구목록 불러오기
-    private fun getFriends(){
-        itemsCollectionRef.document(user).collection("friends")
-            .get()
-            .addOnSuccessListener { result ->
-                for(document in result){
-                    friendList = friendList.plus((document["fid"] as String).trim())
-                    //Log.d("친구추가", (document["fid"] as String).trim())
-                }
-                //print("친구목록: ")
-                //println(Arrays.toString(friendList))
-            }
-    }
+        uid=Firebase.auth.currentUser?.uid.toString()
 
-    //친구목록에서 가져온 fid로 각 친구의 post불러오는 함수
-    private fun getPosts(): Array<Post>{
-        getFriends()
-        friendList.forEach {
-            println(it)
-            itemsCollectionRef.document(it).collection("posts")
-                .get()
-                .addOnSuccessListener { result ->
-                    for(document in result){
-                        println(it)
-                        postList = postList.plus(Post(it, document["text"] as String))
-                        //Log.d("게시글추가", document["text"] as String)
+        db.collection("friends").get()
+            .addOnSuccessListener {
+                for(doc in it){
+                    if(doc["uid"]==uid) {
+                        //friendList.add(doc["fid"].toString())
+                        addPost(doc["fid"].toString())
+                        System.out.println("찾음    " + doc["fid"])
+
                     }
-                    //print("게시글목록:")
-                    //println(Arrays.toString(postList))
                 }
-        }
-        return postList
-    }
+            }
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding.postRecyclerview.setHasFixedSize(true)
+        binding.postRecyclerview.layoutManager = LinearLayoutManager(context)
+        binding.postRecyclerview.adapter = customAdapter
+
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        getPosts()
-
-        binding?.refreshLayout?.setOnRefreshListener {
-            var post = Post("테스트3", "테스트텍스트3")
-            adapter.add(post)
-            println(Arrays.toString(postList))
-            postList.plus(post)
-            //Log.d("추가된 post", Arrays.toString(postList))
-            //getPosts()
-            //binding.postRecyclerview?.adapter = CustomAdapter(getPosts())
-            //adapter.notifyDataSetChanged()
-            binding?.refreshLayout?.isRefreshing = false
-        }
-        binding.postRecyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-        binding.postRecyclerview?.adapter = CustomAdapter(getPosts())
+    fun addPost(uid:String){
+        db.collection("posts").get()
+            .addOnSuccessListener {
+                for (doc in it) {
+                    if (doc["uid"] == uid) {
+                        homeposts.add(0, HomePost(doc["name"].toString(), doc["picUrl"].toString(), doc["text"].toString()))
+                        customAdapter.notifyItemInserted(0)
+                    }
+                }
+            }
     }
 
     override fun onDestroy() {
+        System.out.println("onDestroy")
         super.onDestroy()
-        print("친구목록2")
-        println(Arrays.toString(friendList))
-        print("게시글목록2:")
-        println(Arrays.toString(postList))
     }
+
 }

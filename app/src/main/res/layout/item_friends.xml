@@ -23,6 +23,8 @@
         android:text="TextView"
         android:textAlignment="center"
         android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="18dp"
         />
 
 </LinearLayout>

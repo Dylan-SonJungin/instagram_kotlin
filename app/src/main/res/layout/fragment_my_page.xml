@@ -30,7 +30,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/buttonmain"
                 android:layout_width="200dp"
                 android:layout_height="35dp"
                 android:layout_marginTop="30dp"
@@ -48,9 +48,9 @@
                 android:layout_height="wrap_content"
                 android:text="TextView"
                 android:textColor="#00428B"
-                app:layout_constraintBottom_toBottomOf="@+id/button"
+                app:layout_constraintBottom_toBottomOf="@+id/buttonmain"
                 app:layout_constraintStart_toStartOf="@+id/nameView"
-                app:layout_constraintTop_toTopOf="@+id/button" />
+                app:layout_constraintTop_toTopOf="@+id/buttonmain" />
 
             <TextView
                 android:id="@+id/textView3"

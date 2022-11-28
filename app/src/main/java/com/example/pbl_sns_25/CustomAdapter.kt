@@ -3,42 +3,41 @@ package com.example.pbl_sns_25
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.pbl_sns_25.databinding.FragmentHomeBinding
 import com.example.pbl_sns_25.databinding.ItemPostBinding
+import com.example.pbl_sns_25.databinding.PostLayoutBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+data class HomePost(val email:String, val picUrl: String, val text:String)
 
-class CustomAdapter(val postList: Array<HomeFragment.Post>) : RecyclerView.Adapter<CustomAdapter.viewHolder>(){
+class PostViewHolder(val binding: ItemPostBinding) : RecyclerView.ViewHolder(binding.root)
 
-    //lateinit var storage: FirebaseStorage = Firebase.storage
+class CustomAdapter(private val context: HomeFragment, private val homeposts: MutableList<HomePost>) : RecyclerView.Adapter<PostViewHolder>() {
 
-    fun add(item: HomeFragment.Post){
-        postList.plus(item)
-        notifyDataSetChanged()
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ItemPostBinding.inflate(inflater, parent, false)
+        return PostViewHolder(binding)
     }
 
-    inner class viewHolder(private val binding:ItemPostBinding): RecyclerView.ViewHolder(binding.root){
-        fun setContents(pos: Int){
-            binding.textView.text = postList.get(pos).name
-            //binding.imageView.
-            binding.textView2.text = postList.get(pos).text
-        }
-    }
+    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
+        val homepost = homeposts[position]
+        holder.binding.friendname.text = homepost.email
+        holder.binding.friendtext.text=homepost.text
+        Glide.with(holder.itemView.context)
+            .load(homepost.picUrl)
+            .error(R.drawable.no_image)
+            .fallback(R.drawable.no_image)
+            .centerCrop()
+            .into(holder.binding.imageView)
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): viewHolder {
-        val layoutInflater = LayoutInflater.from(viewGroup.context)
-        val binding = ItemPostBinding.inflate(layoutInflater, viewGroup, false)
-        return viewHolder(binding)
-    }
-
-    override fun onBindViewHolder(viewHolder: viewHolder, position: Int){
-        viewHolder.setContents(position)
     }
 
     override fun getItemCount(): Int {
-        return postList.size
+        return homeposts.size
     }
 }

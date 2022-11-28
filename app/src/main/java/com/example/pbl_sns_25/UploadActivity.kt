@@ -22,7 +22,10 @@ import com.example.pbl_sns_25.databinding.ActivityUploadBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.selects.select
 import java.io.File
 import java.lang.Long.getLong
@@ -34,9 +37,12 @@ class UploadActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUploadBinding
     var imageFile=File("")
     var text:String?=null
+    var userEmail:String?=null
     val uid=Firebase.auth.currentUser?.uid.toString()
     var post = HashMap<String, String>()
     var imageUri:Uri?=null
+    val db: FirebaseFirestore = Firebase.firestore
+    var storage: FirebaseStorage = Firebase.storage
 
     companion object{
         const val REQ_GALLERY=1
@@ -77,7 +83,6 @@ class UploadActivity : AppCompatActivity() {
     }
 
     fun getRealPathFromURI(uri:Uri):String{
-        System.out.println("test3")
         var columnIndex=0
         val proj=arrayOf(MediaStore.Images.Media.DATA)
         val cursor=contentResolver.query(uri,proj,null,null,null)
@@ -91,7 +96,6 @@ class UploadActivity : AppCompatActivity() {
     }
 
     private fun openGallery(){
-        System.out.println("test2")
         val writePermission=ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)
         val readPermission=ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE)
         if(writePermission==PackageManager.PERMISSION_DENIED||readPermission==PackageManager.PERMISSION_DENIED){
@@ -105,6 +109,14 @@ class UploadActivity : AppCompatActivity() {
         }
     }
     fun contentUpload() {
+        db.collection("users").get()
+            .addOnSuccessListener {
+                for(doc in it){
+                    if(doc["uid"]==uid){
+                        userEmail=doc["email"].toString()
+                    }
+                }
+            }
         if (imageUri != null) {
             var fileName =
                 SimpleDateFormat("yyyyMMddHHmmss").format(Date())
@@ -117,7 +129,7 @@ class UploadActivity : AppCompatActivity() {
                         post.put("uid", uid)
                         post.put("picUrl", picUrl);
                         post.put("text", binding.picText.text.toString())
-                        post.put("date",date)
+                        post.put("name", userEmail.toString())
                         db.collection("posts").document().set(post)
                             .addOnSuccessListener {
                                 Snackbar.make(
@@ -131,5 +143,4 @@ class UploadActivity : AppCompatActivity() {
                 }
         }
     }
-
 }

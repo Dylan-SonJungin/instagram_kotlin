@@ -10,13 +10,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pbl_sns_25.databinding.FragmentMyPageBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 
 class MyPageFragment : Fragment() {
     //private lateinit var binding : FragmentMyPageBinding
 
     var auth: FirebaseAuth? = null
-
+    val db: FirebaseFirestore = Firebase.firestore
     var uid: String? = null
     val posts= mutableListOf(Post("https://firebasestorage.googleapis.com/v0/b/sns-25.appspot.com/o/blueinsta_original.png?alt=media&token=e2979537-710e-4ccb-b751-793a5f99d82b",
         "Welcome to Instagram!!!\n게시물 업로드 예시입니다."))
@@ -24,9 +28,9 @@ class MyPageFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentMyPageBinding.inflate(inflater, container, false)
-        //val binding= FragmentMyPageBinding.inflate(layoutInflater)
 
         uid=Firebase.auth.currentUser?.uid.toString()
+
 
         db.collection("users").get()
             .addOnSuccessListener {
@@ -55,7 +59,7 @@ class MyPageFragment : Fragment() {
         binding.recyclerView.adapter = postAdapter
 
 
-        binding.button.setOnClickListener {
+        binding.buttonmain.setOnClickListener {
             startActivity(
                 Intent(activity, LoginActivity::class.java)
             )
