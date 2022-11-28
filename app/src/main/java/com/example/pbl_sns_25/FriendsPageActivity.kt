@@ -22,12 +22,13 @@ class FriendsPageActivity : AppCompatActivity() {
     private var recyclerView: RecyclerView? = null
     val db: FirebaseFirestore = Firebase.firestore
     var storage: FirebaseStorage = Firebase.storage
-    val posts = mutableListOf(
+    val posts= mutableListOf<FriendsPost>()
+    /*val posts = mutableListOf(
         FriendsPost(
             "https://firebasestorage.googleapis.com/v0/b/sns-25.appspot.com/o/blueinsta_original.png?alt=media&token=e2979537-710e-4ccb-b751-793a5f99d82b",
             "Welcome to Instagram!!!\n게시물 업로드 예시입니다."
         )
-    )
+    )*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

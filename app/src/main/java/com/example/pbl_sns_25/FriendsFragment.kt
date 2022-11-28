@@ -27,7 +27,8 @@ class FriendsFragment : Fragment() {
     var uid: String? = null
     var i=0
     var fid:String?=null
-    val friends= mutableListOf(Friends("예시 친구 이메일:\ntest@gmail.com"))
+    val friends= mutableListOf<Friends>()
+    //val friends= mutableListOf(Friends("예시 친구 이메일:\ntest@gmail.com"))
     val friendsAdapter=FriendsAdapter(this, friends)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -67,6 +68,7 @@ class FriendsFragment : Fragment() {
                 //else
                     //Toast.makeText(context,"해당 이메일이 존재하지 않습니다.", Toast.LENGTH_SHORT).show()
             }
+            //Toast.makeText(context,"해당 이메일이 존재하지 않습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 

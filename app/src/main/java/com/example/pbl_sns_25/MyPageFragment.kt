@@ -22,8 +22,9 @@ class MyPageFragment : Fragment() {
     var auth: FirebaseAuth? = null
     val db: FirebaseFirestore = Firebase.firestore
     var uid: String? = null
-    val posts= mutableListOf(Post("https://firebasestorage.googleapis.com/v0/b/sns-25.appspot.com/o/blueinsta_original.png?alt=media&token=e2979537-710e-4ccb-b751-793a5f99d82b",
-        "Welcome to Instagram!!!\n게시물 업로드 예시입니다."))
+    val posts= mutableListOf<Post>()
+   // val posts= mutableListOf(Post("https://firebasestorage.googleapis.com/v0/b/sns-25.appspot.com/o/blueinsta_original.png?alt=media&token=e2979537-710e-4ccb-b751-793a5f99d82b",
+       // "Welcome to Instagram!!!\n게시물 업로드 예시입니다."))
     val postAdapter=PostAdapter(this, posts)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
