@@ -20,6 +20,7 @@ class FriendsAdapter(private val context: FriendsFragment, private val friends: 
         return FriendsViewHolder(binding)
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onBindViewHolder(holder: FriendsViewHolder, position: Int) {
         val post=friends[position]
         holder.binding.friendsEmail.text = post.email.toString()

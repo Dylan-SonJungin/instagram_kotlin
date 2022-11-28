@@ -35,8 +35,9 @@ class HomeFragment : Fragment() {
     var uid: String? = null
     var userEmail:String?=null
     val friendList= mutableListOf<String>()
-    val homeposts= mutableListOf<HomePost>()
-    //val homeposts= mutableListOf(HomePost("example","https://firebasestorage.googleapis.com/v0/b/sns-25.appspot.com/o/blueinsta_original.png?alt=media&token=e2979537-710e-4ccb-b751-793a5f99d82b","친구 게시물 예시입니다."))
+    //val homeposts= mutableListOf<HomePost>()
+    val homeposts= mutableListOf(HomePost("예시 게시물","https://firebasestorage.googleapis.com/v0/b/sns-25.appspot.com/o/%E1%84%89%E1%85%A1%E1%86%BC%E1%84%89%E1%85%A1%E1%86%BC%E1%84%87%E1%85%AE%E1%84%80%E1%85%B5.jpeg?alt=media&token=380a7055-aeb9-4426-8a38-3d9c5aafdaac",
+        "친구 게시물 예시입니다.\n친구 추가를 하면 친구의 게시물이\n홈 화면에 뜨게 됩니다."))
     val customAdapter=CustomAdapter(this, homeposts)
 
 

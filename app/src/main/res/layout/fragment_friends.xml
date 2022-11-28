@@ -45,7 +45,12 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_height="500dp"/>
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="  친구 메일 예시: test@gmail.com\n  가입하지 않은 메일을 입력하면 친구 추가가 되지 않습니다." />
     </LinearLayout>
 </FrameLayout>
