@@ -1,4 +1,3 @@
-# PBL-sns-25
-고급 모바일 프로그래밍 25조
+# PBL-sns
+2022-2학기 Android Programming PBL
 
-testing git-jungin
